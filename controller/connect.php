@@ -5,7 +5,7 @@
 		
 		function connection()
 		{
-			return mysqli_connect('localhost','root','','newhrm');
+			return mysqli_connect('localhost:3370','root','','newhrm');
 		}
 	}
 

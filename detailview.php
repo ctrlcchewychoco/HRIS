@@ -265,7 +265,7 @@
                 </tbody>
                 <tbody>
                     <tr>
-                        <td style="text-align: right;"><b>Email</b> ::</td>
+                        <td style="text-align: right;"><b>Username</b> ::</td>
                         <td><?php echo !empty($row['Email']) ? htmlspecialchars($row['Email']) : 'Not provided'; ?></td>
                     </tr>
                 </tbody>

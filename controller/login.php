@@ -140,7 +140,7 @@
 				$email = $_SESSION['User']['Email'];
 				$roleid = $_SESSION['User']['RoleId'];
 
-				date_default_timezone_set("Asia/Kolkata");
+				date_default_timezone_set("Asia/Manila");
 				$datetime = date("Y-m-d H:i:s");
 				mysqli_query($db,"update employee set LastLogin='$datetime' where Email='$email' ");
 				$sqll = mysqli_query($db,"select * from role where RoleId='$roleid'");
@@ -161,7 +161,7 @@
 		$Username = $GLOBALS["Username"];
 		$Password = $GLOBALS["Password"];
 		$mac = $GLOBALS["mac"];
-		$sql = mysqli_query($db,"select * from employee where Email='$Username' AND Password='$Password' AND RoleId=1 ");
+		$sql = mysqli_query($db,"select * from employee where Email='$Username' AND Password='$Password' AND RoleId=3 ");
 
 		if(mysqli_num_rows($sql) > 0)
 		{
@@ -199,7 +199,7 @@
 		}
 		else
 		{
-			header("location:../user/index.php?msg=Username and Password is Wrong!");exit;
+			header("location:../user/index.php?msg=haha and Password is Wrong!");exit;
 		}
 	}
 ?>

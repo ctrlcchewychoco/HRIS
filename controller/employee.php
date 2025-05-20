@@ -8,12 +8,9 @@
 	if(isset($_POST['submit']))
 	{
 		$data=$_POST;
-		$editid = 0;
-		if(isset($_GET['empedit'])){ 
-			$editid = $_GET['empedit'];
-		}
+		$editid = isset($_GET['empedit']) ? intval($_GET['empedit']) : 0;
 		$empid=$data['empid'];
-		// $img=$_FILES['imagefilename']['name'];
+		$img=$_FILES['imagefilename']['name'];
 		$gender=$data['gender'];
 		$fname=$data['fname'];
 		$mname=$data['mname'];
@@ -32,7 +29,6 @@
 		$password=$data['password'];
 		$marital=$data['marital'];
 		$position=$data['position'];
-		$imagefilename = true;
 		$sss=$data['sss'] ?? '';
 		$philhealth = $data['philhealth'] ?? '';
 		$pagibig = $data['pagibig'] ?? '';
@@ -54,18 +50,21 @@
 		// $memo = $data['memo'];
 		// $memodate = $data['memodate'];
 		// $memonote = $data['memonote'];
-		$ImageComplete=true;
+		$ImageComplete=false;
 
 		if($editid===0){
 			$sql = mysqli_query($db,"select * from employee where Email='$email'");
 		}
 		else{
-			$sql = mysqli_query($db,"select * from employee where Email='$email' and EmployeeId !=$editid");
+			$stmt = $db->prepare("SELECT * FROM employee WHERE Email = ? AND EmployeeId != ?");
+			$stmt->bind_param("ss", $email, $editid);
+			$stmt->execute();
+			$sql = $stmt->get_result();
 		}
 		
 		if(mysqli_num_rows($sql) > 0)
 		{
-			 header("location:../employeeadd.php?msg=Email address all ready existed!");exit;
+			header("location:../employeeadd.php?msg=Email address all ready existed!");exit;
 		}
 		else
 		{
@@ -83,7 +82,7 @@
 				}
 				else
 				{
-					if($size > 1000000)
+					if($size > 5000000)
 					{
 						 header("location:../employeeadd.php?msg=File size upto 1MB required ! ");exit;
 					}
@@ -110,7 +109,6 @@
 
 		if($ImageComplete)
 		{
-			echo $ImageComplete;
 			$roleid = $_SESSION['User']['RoleId'];
 			date_default_timezone_set("Asia/Kolkata");
 			$datetime = date("Y-m-d h:i:s");
@@ -128,13 +126,13 @@
 				}
 // dito 
 				$stmt = $db->prepare("INSERT INTO employee(
-				EmployeeId, Firstname, MiddleName, LastName, Birthdate, Gender, PresentAddress, PermanentAddress, CityId, Mobile, Email, Password, MaritalStatus, PositionId, CreatedBy, JoinDate, StatusId, RoleId, sss, philhealth, pagibig,taxidentification, barangay, birthcertificate, marriagecert, diplomator, healtcertificate, educationalbackground, educcourse, citizenship, placeofbirth, religion, height, weight, contactpersonname, contactpersonnumber)
-				VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-				$stmt->bind_param("ssssssssssssssssssssssssssssssssssss", $empid, $fname, $mname, $lname, $bdate, $gender, $address1, $address2, $city, $mnumber, $email, $password, $marital, $position, $roleid, $joindate, $status, $role, $sss, $philhealth, $pagibig,$taxidentification,$barangay,$birthcertificate,$marriagecert,$diplomator,$healtcertificate,$educationalbackground,$educcourse,$citizenship,$placeofbirth,$religion,$height,$weight,$emergencyname,$emercontact);
+				EmployeeId, Firstname, MiddleName, LastName, Birthdate, Gender, PresentAddress, PermanentAddress, CityId, Mobile, Email, Password, MaritalStatus, PositionId, CreatedBy, JoinDate, StatusId, RoleId, sss, philhealth, pagibig, taxidentification, barangay, birthcertificate, marriagecert, diplomator, healtcertificate, educationalbackground, educcourse, citizenship, placeofbirth, religion, height, weight, contactpersonname, contactpersonnumber, ImageName)
+				VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				$stmt->bind_param("sssssssssssssssssssssssssssssssssssss", $empid, $fname, $mname, $lname, $bdate, $gender, $address1, $address2, $city, $mnumber, $email, $password, $marital, $position, $roleid, $joindate, $status, $role, $sss, $philhealth, $pagibig, $taxidentification, $barangay, $birthcertificate, $marriagecert, $diplomator, $healtcertificate, $educationalbackground, $educcourse, $citizenship, $placeofbirth, $religion, $height, $weight, $emergencyname, $emercontact, $name);
 
 				if($stmt->execute())
 				{
-				   header("location:../detailview.php?employeeid=$empid ");exit;
+					header("location:../detailview.php?employeeid=$empid ");exit;
 				}
 				else
 				{
@@ -158,19 +156,19 @@
 					$name = $_POST["imagefilename"];
 				}
 
-				$stmt = $db->prepare("UPDATE employee SET EmployeeId=?, Firstname=?, MiddleName=?, LastName=?, Birthdate=?, Gender=?, PresentAddress=?, PermanentAddress=?, CityId=?, Mobile=?, Email=?, Password=?, MaritalStatus=?, PositionId=?, CreatedBy=?, JoinDate=?, StatusId=?, RoleId=?, sss=?, philhealth=?, pagibig=?, taxidentification=?, barangay=?, birthcertificate=?, marriagecert=?, diplomator=?, healtcertificate=?, educationalbackground=?, educcourse=?, citizenship=?, placeofbirth=?, religion=?, height=?, weight=? WHERE EmployeeId=?");
+				$stmt = $db->prepare("UPDATE employee SET EmployeeId=?, Firstname=?, MiddleName=?, LastName=?, Birthdate=?, Gender=?, PresentAddress=?, PermanentAddress=?, CityId=?, Mobile=?, Email=?, Password=?, MaritalStatus=?, PositionId=?, CreatedBy=?, JoinDate=?, StatusId=?, RoleId=?, sss=?, philhealth=?, pagibig=?, taxidentification=?, barangay=?, birthcertificate=?, marriagecert=?, diplomator=?, healtcertificate=?, educationalbackground=?, educcourse=?, citizenship=?, placeofbirth=?, religion=?, height=?, weight=?, ImageName=? WHERE EmployeeId=?");
 
-				$stmt->bind_param("sssssssssssssssssssssssssssssssssss", $editid, $fname, $mname, $lname, $bdate, $gender, $address1, $address2, $city, $mnumber, $email, $password, $marital, $position, $roleid, $joindate, $status, $role, $sss, $philhealth, $pagibig,$taxidentification,$barangay,$birthcertificate,$marriagecert,$diplomator,$healtcertificate,$educationalbackground,$educcourse,$citizenship,$placeofbirth,$religion,$height,$weight, $editid);
+				$stmt->bind_param("ssssssssssssssssssssssssssssssssssss", $editid, $fname, $mname, $lname, $bdate, $gender, $address1, $address2, $city, $mnumber, $email, $password, $marital, $position, $roleid, $joindate, $status, $role, $sss, $philhealth, $pagibig,$taxidentification,$barangay,$birthcertificate,$marriagecert,$diplomator,$healtcertificate,$educationalbackground,$educcourse,$citizenship,$placeofbirth,$religion,$height,$weight, $name, $editid);
 
 				if($stmt->execute())
 				{
-					header("location:../detailview.php?employeeid=$editid ");exit;
+					header("location:../detailview.php?employeeid=$editid");exit;
 				}
 				else
 				{
 					echo 'error';
 					echo mysqli_error($db);
-				 header("location:../employeeadd.php?msg=Error in adding employee!");exit;
+					header("location:../employeeadd.php?msg=Error in adding employee!");exit;
 				}
 
 			}

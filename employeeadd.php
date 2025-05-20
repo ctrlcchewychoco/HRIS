@@ -69,7 +69,7 @@
                   <span class="input-group-addon">
               <i class="fa fa-user" aria-hidden="true"></i>
               </span>
-              <input type="text" name="empid" title="Employee ID" value="<?php echo(isset($editemp["EmployeeId"]))?$editemp["EmployeeId"]:""; ?>" class="form-control" placeholder="Employee ID" required="" <?php echo isset($_GET['empedit']) ? 'readonly' : ''; ?> >
+              <input type="number" name="empid" title="Employee ID" value="<?php echo(isset($editemp["EmployeeId"]))?$editemp["EmployeeId"]:""; ?>" class="form-control" placeholder="Employee ID" required="" <?php echo isset($_GET['empedit']) ? 'readonly' : ''; ?> >
               </div>
             </div>
             
@@ -157,7 +157,7 @@
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="text" name="mnumber" title="Mobile Number" value="<?php echo(isset($editemp["Mobile"]))?$editemp["Mobile"]:""; ?>" class="form-control" placeholder="Mobile Number" min="10" maxlength="10" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" required="">
+              <input type="text" name="mnumber" title="Mobile Number" value="<?php echo(isset($editemp["Mobile"]))?$editemp["Mobile"]:""; ?>" class="form-control" placeholder="Mobile Number" minlength="11" maxlength="11" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" pattern="09[0-9]{9}" required="">
               </div>
             </div>
 
@@ -298,12 +298,12 @@
 
             <div class="vali-form-group">
     <div class="col-md-3 control-label">
-        <label class="control-label">Email*</label>
+        <label class="control-label">Username*</label>
         <div class="input-group">             
             <span class="input-group-addon">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
             </span>
-            <input type="email" name="email" title="Email" value="<?php echo(isset($editemp["Email"]))?$editemp["Email"]:""; ?>" class="form-control" placeholder="Email Address" required="">
+            <input type="text" name="email" title="Email" value="<?php echo(isset($editemp["Email"]))?$editemp["Email"]:""; ?>" class="form-control" placeholder="Email Address" required="">
         </div>
     </div>
             
@@ -329,7 +329,7 @@
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="text" name="sss" title="SSS Number" value="<?php echo(isset($editemp["sss"]))?$editemp["sss"]:""; ?>" class="form-control" placeholder="SSS Number" min="10" maxlength="10" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" >
+              <input type="number" name="sss" title="SSS Number" value="<?php echo(isset($editemp["sss"]))?$editemp["sss"]:""; ?>" class="form-control" placeholder="SSS Number" min="10" maxlength="10" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" >
               </div>
             </div>
 
@@ -358,7 +358,7 @@ function formatSSS(input) {
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="text" name="philhealth" title="Philhealth Number" value="<?php echo(isset($editemp["philhealth"]))?$editemp["philhealth"]:""; ?>" class="form-control" placeholder="Philhealth Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+              <input type="number" name="philhealth" title="Philhealth Number" value="<?php echo(isset($editemp["philhealth"]))?$editemp["philhealth"]:""; ?>" class="form-control" placeholder="Philhealth Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
               </div>
             </div>
 
@@ -368,7 +368,7 @@ function formatSSS(input) {
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="text" name="pagibig" title="Pag-Ibig Number" value="<?php echo(isset($editemp["pagibig"]))?$editemp["pagibig"]:""; ?>" class="form-control" placeholder="Pag-ibig Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+              <input type="number" name="pagibig" title="Pag-Ibig Number" value="<?php echo(isset($editemp["pagibig"]))?$editemp["pagibig"]:""; ?>" class="form-control" placeholder="Pag-ibig Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
               </div>
             </div>
 
@@ -378,7 +378,7 @@ function formatSSS(input) {
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="text" name="taxidentification" title="Pag-Ibig Number" value="<?php echo(isset($editemp["taxidentification"]))?$editemp["taxidentification"]:""; ?>" class="form-control" placeholder="Tax Identification Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+              <input type="number" name="taxidentification" title="Pag-Ibig Number" value="<?php echo(isset($editemp["taxidentification"]))?$editemp["taxidentification"]:""; ?>" class="form-control" placeholder="Tax Identification Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
               </div>
             </div>
 
@@ -743,7 +743,7 @@ function formatSSS(input) {
             <div class="col-md-12 form-group" style="text-align: center; margin-top: 20px;">
     <button type="submit" name="submit" class="btn btn-primary" style="margin-right: 10px;">Submit</button>
     <button type="reset" class="btn btn-default" style="margin-right: 10px;">Reset</button>
-    <input type="text" name="imagefilename" hidden="" value="<?php echo(isset($editemp['ImageName']))?$editemp['ImageName']:''; ?>">
+    <input type="file" name="imagefilename" value="<?php echo(isset($editemp['ImageName']))?$editemp['ImageName']:''; ?>">
 </div>
           <div class="clearfix"> </div>
         </form>
