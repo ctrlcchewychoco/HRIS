@@ -112,7 +112,34 @@ body {
     color: #fff;
 }
 
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input {
+    margin-bottom: 0 !important;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+}
+
+.caps-warning {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+    position: absolute;
+    width: 100%;
+}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -123,12 +150,63 @@ body {
 <div class="login-block">
     <h1>Login</h1>
     <form class="form" method="POST" Action="../controller/login.php">
-    <input type="text" name="name" value="" placeholder="Email ID" id="username" />
-    <input type="password" name="password" value="" placeholder="Password" id="password" />
+    <input type="text" name="name" value="" placeholder="Username" id="username" />
+    <div class="password-container">
+        <input type="password" 
+               name="password" 
+               value="" 
+               placeholder="Password" 
+               id="password" 
+               onkeyup="checkCapsLock(event)"
+               onkeypress="return preventCapsLock(event)"/>
+        <i class="toggle-password fa fa-eye" onclick="togglePassword()" id="togglePassword"></i>
+        <div id="capsLockWarning" class="caps-warning">Warning: Caps Lock is ON - Please turn it off</div>
+    </div>
     <h4 style="color: #FF0000; font-weight: normal;"><?php echo $result; ?></h3>
     <button type="submit" name="clientlogin">Submit</button>
     </form>
 </div>
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('togglePassword');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}
+
+function preventCapsLock(e) {
+    if (e.getModifierState('CapsLock')) {
+        e.preventDefault();
+        document.getElementById('capsLockWarning').style.display = 'block';
+        return false;
+    }
+    document.getElementById('capsLockWarning').style.display = 'none';
+    return true;
+}
+
+function checkCapsLock(event) {
+    const warning = document.getElementById('capsLockWarning');
+    if (event.getModifierState('CapsLock')) {
+        warning.style.display = 'block';
+    } else {
+        warning.style.display = 'none';
+    }
+}
+
+document.getElementById('password').addEventListener('focus', function(e) {
+    if (e.getModifierState('CapsLock')) {
+        document.getElementById('capsLockWarning').style.display = 'block';
+    }
+});
+</script>
 </body>
 
 </html>

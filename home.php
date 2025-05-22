@@ -11,7 +11,7 @@
 ?>
 
 <ol class="breadcrumb" style="margin: 10px 0px ! important;">
-    <li class="breadcrumb-item" title="Home"><span class="text-secondary">HOME - EAGLE FLY BUILDERS INC.</span></li>
+    <li class="breadcrumb-item"><span class="text-secondary">HOME - EAGLE FLY BUILDERS INC.</span></li>
 </ol>
 <!--four-grids here-->
 		<div class="row" style="">

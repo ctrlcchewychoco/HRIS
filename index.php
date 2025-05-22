@@ -111,6 +111,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     .sin-w3-agile {
         margin-bottom: 60px;
     }
+
+    /* Add this CSS in the existing <style> section */
+	.caps-warning {
+	    color: #ff9900;
+	    font-size: 12px;
+	    margin-top: 5px;
+	    display: none;
+	}
 </style>
 </head> 
 <body>
@@ -131,7 +139,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 				<div class="password-agileits">
 					<span class="username">Password: <i class="fa fa-eye-slash" aria-hidden="false" style="padding-left: 20px;" onclick="passwordeyes(this);"></i></span>
-					<input type="password" name="password" id="Psw" class="password"  placeholder="Enter Password">
+x					<input type="password" name="password" id="Psw" class="password" placeholder="Enter Password" 
+           onkeyup="checkCapsLock(event)" onkeypress="return handleCapsLock(event)">
+    <div id="caps-warning" class="caps-warning">
+        <i class="fa fa-exclamation-triangle"></i> CAPS LOCK is ON
+    </div>
 					<div class="clearfix"></div>
 				</div>
 				<h4 style="color: #F1C40F;"><?php echo $result; ?></h4>
@@ -139,8 +151,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="login-w3">
 					<input type="submit" name="submit" class="login" value="Sign In">
 				</div>
-				<div class="clearfix"></div>
-				<h5 class="text-center"><a href="./user" class="text-white" >Login as an Employee</a></h5>
 				<div class="clearfix"></div>
 			</form>
 					<!-- <div class="back">
@@ -162,6 +172,54 @@ function passwordeyes(_this) {
       document.getElementById("Psw").type="password";
 	  _this.setAttribute('class', "fa fa-eye-slash")
 	}
+}
+
+function checkCapsLock(event) {
+    var warning = document.getElementById('caps-warning');
+    if (event.getModifierState('CapsLock')) {
+        warning.style.display = 'block';
+    } else {
+        warning.style.display = 'none';
+    }
+}
+
+// Also check when the window gains focus
+window.addEventListener('focus', function(e) {
+    if (document.getModifierState('CapsLock')) {
+        document.getElementById('caps-warning').style.display = 'block';
+    }
+});
+
+// Check when user clicks on the password field
+document.getElementById('Psw').addEventListener('mousedown', function(e) {
+    if (document.getModifierState('CapsLock')) {
+        document.getElementById('caps-warning').style.display = 'block';
+    }
+});
+
+function handleCapsLock(event) {
+    if (event.getModifierState('CapsLock')) {
+        // Convert the character to lowercase if CAPS LOCK is on
+        let char = String.fromCharCode(event.keyCode || event.which);
+        if (char.toUpperCase() === char && !event.shiftKey) {
+            // Insert lowercase character at cursor position
+            let input = event.target;
+            let start = input.selectionStart;
+            let end = input.selectionEnd;
+            let value = input.value;
+            
+            input.value = value.substring(0, start) + 
+                         char.toLowerCase() + 
+                         value.substring(end);
+            
+            // Move cursor to correct position
+            input.selectionStart = input.selectionEnd = start + 1;
+            
+            // Prevent default character insertion
+            return false;
+        }
+    }
+    return true;
 }
 </script>
 </body>

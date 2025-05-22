@@ -8,7 +8,7 @@
 	if(isset($_POST['submit']))
 	{
 		$data=$_POST;
-		$editid = isset($_GET['empedit']) ? intval($_GET['empedit']) : 0;
+		$editid = isset($_GET['empedit']) && !empty($_GET['empedit']) ? $_GET['empedit'] : false;
 		$empid=$data['empid'];
 		$img=$_FILES['imagefilename']['name'];
 		$gender=$data['gender'];
@@ -52,7 +52,7 @@
 		// $memonote = $data['memonote'];
 		$ImageComplete=false;
 
-		if($editid===0){
+		if(!$editid){
 			$sql = mysqli_query($db,"select * from employee where Email='$email'");
 		}
 		else{
@@ -74,7 +74,7 @@
 				$temp=$_FILES['imagefilename']['tmp_name'];
 				$size=$_FILES['imagefilename']['size'];
 				$type=$_FILES['imagefilename']['type'];
-							echo 'image world';
+				echo 'image world';
 	
 				if($type != "image/jpg" && $type != "image/png" && $type != "image/jpeg" && $type != "image/gif")
 				{
@@ -110,10 +110,10 @@
 		if($ImageComplete)
 		{
 			$roleid = $_SESSION['User']['RoleId'];
-			date_default_timezone_set("Asia/Kolkata");
+			date_default_timezone_set("Asia/Manila");
 			$datetime = date("Y-m-d h:i:s");
 
-			if($editid===0)
+			if(!$editid)
 			{
 				if(!empty($_FILES['imagefilename']['name']))
 				{
@@ -156,9 +156,93 @@
 					$name = $_POST["imagefilename"];
 				}
 
-				$stmt = $db->prepare("UPDATE employee SET EmployeeId=?, Firstname=?, MiddleName=?, LastName=?, Birthdate=?, Gender=?, PresentAddress=?, PermanentAddress=?, CityId=?, Mobile=?, Email=?, Password=?, MaritalStatus=?, PositionId=?, CreatedBy=?, JoinDate=?, StatusId=?, RoleId=?, sss=?, philhealth=?, pagibig=?, taxidentification=?, barangay=?, birthcertificate=?, marriagecert=?, diplomator=?, healtcertificate=?, educationalbackground=?, educcourse=?, citizenship=?, placeofbirth=?, religion=?, height=?, weight=?, ImageName=? WHERE EmployeeId=?");
+				if(!empty($_FILES['imagefilename']['name']))
+				{
+					$stmt = $db->prepare("UPDATE employee SET 
+						EmployeeId=?, 
+						Firstname=?, 
+						MiddleName=?, 
+						LastName=?, 
+						Birthdate=?, 
+						Gender=?, 
+						PresentAddress=?, 
+						PermanentAddress=?, 
+						CityId=?, 
+						Mobile=?, 
+						Email=?, 
+						Password=?, 
+						MaritalStatus=?, 
+						PositionId=?, 
+						CreatedBy=?, 
+						JoinDate=?, 
+						StatusId=?, 
+						RoleId=?, 
+						sss=?, 
+						philhealth=?, 
+						pagibig=?, 
+						taxidentification=?, 
+						barangay=?, 
+						birthcertificate=?, 
+						marriagecert=?, 
+						diplomator=?, 
+						healtcertificate=?, 
+						educationalbackground=?, 
+						educcourse=?, 
+						citizenship=?, 
+						placeofbirth=?, 
+						religion=?, 
+						height=?, 
+						weight=?,
+						contactpersonname=?,
+						contactpersonnumber=?,
+						ImageName=? 
+					WHERE EmployeeId=?");
 
-				$stmt->bind_param("ssssssssssssssssssssssssssssssssssss", $editid, $fname, $mname, $lname, $bdate, $gender, $address1, $address2, $city, $mnumber, $email, $password, $marital, $position, $roleid, $joindate, $status, $role, $sss, $philhealth, $pagibig,$taxidentification,$barangay,$birthcertificate,$marriagecert,$diplomator,$healtcertificate,$educationalbackground,$educcourse,$citizenship,$placeofbirth,$religion,$height,$weight, $name, $editid);
+					$stmt->bind_param("ssssssssssssssssssssssssssssssssssssss", $editid, $fname, $mname, $lname, $bdate, $gender, $address1, $address2, $city, $mnumber, $email, $password, $marital, $position, $roleid, $joindate, $status, $role, $sss, $philhealth, $pagibig,$taxidentification,$barangay,$birthcertificate,$marriagecert,$diplomator,$healtcertificate,$educationalbackground,$educcourse,$citizenship,$placeofbirth,$religion,$height,$weight, $emergencyname, $emercontact, $name, $editid);
+				}
+				else
+				{
+					$stmt = $db->prepare("UPDATE employee SET 
+						EmployeeId=?, 
+						Firstname=?, 
+						MiddleName=?, 
+						LastName=?, 
+						Birthdate=?, 
+						Gender=?, 
+						PresentAddress=?, 
+						PermanentAddress=?, 
+						CityId=?, 
+						Mobile=?, 
+						Email=?, 
+						Password=?, 
+						MaritalStatus=?, 
+						PositionId=?, 
+						CreatedBy=?, 
+						JoinDate=?, 
+						StatusId=?, 
+						RoleId=?, 
+						sss=?, 
+						philhealth=?, 
+						pagibig=?, 
+						taxidentification=?, 
+						barangay=?, 
+						birthcertificate=?, 
+						marriagecert=?, 
+						diplomator=?, 
+						healtcertificate=?, 
+						educationalbackground=?, 
+						educcourse=?, 
+						citizenship=?, 
+						placeofbirth=?, 
+						religion=?, 
+						height=?, 
+						weight=?,
+						contactpersonname=?,
+						contactpersonnumber=?
+					WHERE EmployeeId=?");
+
+					$stmt->bind_param("sssssssssssssssssssssssssssssssssssss", $editid, $fname, $mname, $lname, $bdate, $gender, $address1, $address2, $city, $mnumber, $email, $password, $marital, $position, $roleid, $joindate, $status, $role, $sss, $philhealth, $pagibig,$taxidentification,$barangay,$birthcertificate,$marriagecert,$diplomator,$healtcertificate,$educationalbackground,$educcourse,$citizenship,$placeofbirth,$religion,$height,$weight, $emergencyname, $emercontact, $editid);
+				}
 
 				if($stmt->execute())
 				{

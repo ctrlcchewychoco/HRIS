@@ -182,7 +182,7 @@
 				                $lname = (isset($row['LastName'])) ? $row['LastName'] : "";
 				                echo ucfirst($fname)."&nbsp;".$mname."&nbsp;".$lname;
 				             ?>" 
-				             src="image/<?php echo !empty($row['ImageName']) ? htmlspecialchars($row['ImageName']) : 'default.png'; ?>" 
+				             src="image/<?php echo !empty($row['ImageName']) ? htmlspecialchars($row['ImageName']) : 'fblogo.jpg'; ?>" 
 				             onclick="openImageModal(this)">
 				    </div>
 				</td>

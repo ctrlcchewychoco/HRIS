@@ -59,6 +59,20 @@
         }
         return $tin;
     }
+
+    function formatContactNumber($number) {
+        if(!empty($number)) {
+            // Pad the number with leading zeros if needed
+            $number = str_pad($number, 11, '0', STR_PAD_LEFT);
+            // Format only if it's an 11-digit number starting with '09'
+            if(strlen($number) == 11 && substr($number, 0, 2) == '09') {
+                return substr($number, 0, 4) . '-' . 
+                       substr($number, 4, 3) . '-' . 
+                       substr($number, 7, 4);
+            }
+        }
+        return $number;
+    }
     
     if(isset($_GET['employeeid'])) {
         $empid = mysqli_real_escape_string($db, $_GET['employeeid']);
@@ -186,9 +200,9 @@
                     <tr>
                         <td rowspan="2" style="text-align: right;"><b>Photo</b>&nbsp; ::</td>
                         <td rowspan="2">
-                            <img src="image/<?php echo !empty($row['ImageName']) ? htmlspecialchars($row['ImageName']) : 'default.png'; ?>" 
+                            <img src="image/<?php echo !empty($row['ImageName']) ? htmlspecialchars($row['ImageName']) : 'fblogo.jpg'; ?>" 
                                  style="height: 100px; border: double;" 
-                                 onerror="this.src='image/default.png'">
+                                 onerror="this.src='image/efbibg.jpg'">
                         </td>
                     </tr>
                 </tbody>
@@ -382,13 +396,30 @@
                 <tbody>
                     <tr>
                         <td style="text-align: right;"><b>Contact Person Name</b> ::</td>
-                        <td><?php echo !empty($row['contactpersonname']) ? htmlspecialchars($row['contactpersonname']) : 'Not provided'; ?></td>
+                        <td><?php 
+                            if(!empty($row['contactpersonname'])) {
+                                // Properly format and capitalize the contact person name
+                                $contactName = ucwords(strtolower(trim($row['contactpersonname'])));
+
+                                echo htmlspecialchars($contactName);
+                            } else {
+                                echo 'Not provided';
+                            }
+                        ?></td>
                     </tr>
-                </tbody>
+                </tbody>    
                 <tbody>
                     <tr>
                         <td style="text-align: right;"><b>Contact Person Number</b> ::</td>
-                        <td><?php echo !empty($row['contactpersonnumber']) ? htmlspecialchars($row['contactpersonnumber']) : 'Not provided'; ?></td>
+                        <td><?php 
+                            if(!empty($row['contactpersonnumber'])) {
+                                // Format and ensure leading zero
+                                $formattedNumber = formatContactNumber($row['contactpersonnumber']);
+                                echo htmlspecialchars($formattedNumber);
+                            } else {
+                                echo 'Not provided';
+                            }
+                        ?></td>
                     </tr>
                 </tbody>
             </table>

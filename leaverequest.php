@@ -20,6 +20,12 @@
     mysqli_query($db,"update leavedetails set LeaveStatus='$denied' where Detail_Id='$deniedid'");
     echo "<script>window.location='leaverequest.php';</script>";
   }
+  if(isset($_GET['delete']))
+  {
+    $deleteid = $_GET['delete'];
+    mysqli_query($db,"DELETE FROM leavedetails WHERE Detail_Id='$deleteid'");
+    echo "<script>window.location='leaverequest.php';</script>";
+  }
 
   $laccept = mysqli_query($db,"SELECT l.*,e.FirstName,e.LastName,lt.Type_of_Name FROM leavedetails l JOIN employee e ON l.EmpId=e.EmployeeId JOIN type_of_leave lt on l.TypesLeaveId=lt.LeaveId WHERE LeaveStatus='Accept'");
   $ldenied = mysqli_query($db,"SELECT l.*,e.FirstName,e.LastName,lt.Type_of_Name FROM leavedetails l JOIN employee e ON l.EmpId=e.EmployeeId JOIN type_of_leave lt on l.TypesLeaveId=lt.LeaveId WHERE LeaveStatus='Denied'");
@@ -120,87 +126,120 @@
 <div class="validation-form" style="margin-bottom: 0px;margin-top: 10px;">
 <h2>Accepted Leave</h2>
 <div class="row" style="color: white; margin-right: 0; margin-left: 0;">
-  <div class="col-md-1" style="background-color: #202a29;">
-    <h5>ID</h5>
-  </div>
-  <div class="col-md-4" style="background-color: #202a29;">
-    <h5>Name</h5>
-  </div>
-  <div class="col-md-3" style="background-color: #202a29;">
-    <h5>Leave Type</h5>
-  </div>
-  <div class="col-md-2" style="background-color: #202a29;">
-    <h5>Start Date</h5>
-  </div>
-  <div class="col-md-2" style="background-color: #202a29;">
-    <h5>End Date</h5>
-  </div>
+    <div style="background: #202a29;" class="col-md-1 control-label">
+        <h5>ID</h5>
+    </div>
+    <div style="background: #202a29;" class="col-md-2 control-label">
+        <h5>Name</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-1 control-label">
+        <h5>Emp ID</h5>
+    </div>
+    <div style="background: #202a29;" class="col-md-2 control-label">
+        <h5>Leave Type</h5>
+    </div>
+    <div style="background: #202a29;" class="col-md-1 control-label">
+        <h5>Reason</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-2 control-label">
+        <h5>Start Date</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-2 control-label">
+        <h5>End Date</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-1 control-label">
+        <h5>Action</h5>
+    </div>
 </div>
 
-    <?php $i=1; while($row = mysqli_fetch_assoc($laccept)) { 
-      $name = ucfirst($row['FirstName']." ".$row['LastName']);
-      ?>
-<div class="row" style="margin-right: 0; margin-left: 0;">
-  <div class="col-md-1">
-    <h5><?php $i=$i; echo $i; $i++;?></h5>
-  </div>
-  <div class="col-md-4">
-    <h5><?php echo(isset($name))?$name:"";?></h5>
-  </div>
-  <div class="col-md-3">
-    <h5><?php echo(isset($row['Type_of_Name']))?$row['Type_of_Name']:"";?></h5>
-  </div>
-  <div class="col-md-2">
-    <h5><?php echo(isset($row['StateDate']))?$row['StateDate']:"";?></h5>
-  </div>
-  <div class="col-md-2">
-    <h5><?php echo(isset($row['EndDate']))?$row['EndDate']:"";?></h5>
-  </div>
-</div><hr style="margin-bottom: 0px;margin-top: 0px;border-top: 1px solid #eee;">
+<?php $i=1; while($row = mysqli_fetch_assoc($laccept)) { 
+    $name = ucfirst($row['FirstName']." ".$row['LastName']);
+?>
+<div class="row" style="margin-right: 0; margin-top: 10px; margin-left: 0;">
+    <div class="col-md-1"><h5><?php echo $i++; ?></h5></div>
+    <div class="col-md-2"><h5><?php echo htmlspecialchars($name); ?></h5></div>
+    <div class="col-md-1" style="text-align: center;">
+        <h5><?php echo htmlspecialchars($row['EmpId']); ?></h5>
+    </div>
+    <div class="col-md-2">
+        <h5><?php echo htmlspecialchars($row['Type_of_Name']); ?></h5>
+    </div>
+    <div class="col-md-1">
+        <h5><?php echo htmlspecialchars($row['Reason']); ?></h5>
+    </div>
+    <div class="col-md-2" style="text-align: center;">
+        <h5><?php echo htmlspecialchars($row['StateDate']); ?></h5>
+    </div>
+    <div class="col-md-2" style="text-align: center;">
+        <h5><?php echo htmlspecialchars($row['EndDate']); ?></h5>
+    </div>
+    <div class="col-md-1" style="text-align: center;">
+        <a href="#" onclick="return confirmDelete('<?php echo $row['Detail_Id'];?>')" title="Delete">
+            <i class="fa fa-times" style="color: #202a29;" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
+<hr style="margin-bottom: 0px;margin-top: 0px;border-top: 1px solid #eee;">
 <?php } ?>
-<div class="clearfix"></div>
 </div>
 
 <div class="validation-form" style="margin-bottom: 30px;margin-top: 10px;">
 <h2>Denied Leave</h2>
 <div class="row" style="color: white; margin-right: 0; margin-left: 0;">
-  <div class="col-md-1" style="background-color: #202a29;">
-    <h5>ID</h5>
-  </div>
-  <div class="col-md-4" style="background-color: #202a29;">
-    <h5>Name</h5>
-  </div>
-  <div class="col-md-3" style="background-color: #202a29;">
-    <h5>Leave Type</h5>
-  </div>
-  <div class="col-md-2" style="background-color: #202a29;">
-    <h5>Start Date</h5>
-  </div>
-  <div class="col-md-2" style="background-color: #202a29;">
-    <h5>End Date</h5>
-  </div>
+    <div style="background: #202a29;" class="col-md-1 control-label">
+        <h5>ID</h5>
+    </div>
+    <div style="background: #202a29;" class="col-md-2 control-label">
+        <h5>Name</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-1 control-label">
+        <h5>Emp ID</h5>
+    </div>
+    <div style="background: #202a29;" class="col-md-2 control-label">
+        <h5>Leave Type</h5>
+    </div>
+    <div style="background: #202a29;" class="col-md-1 control-label">
+        <h5>Reason</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-2 control-label">
+        <h5>Start Date</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-2 control-label">
+        <h5>End Date</h5>
+    </div>
+    <div style="background: #202a29; text-align: center;" class="col-md-1 control-label">
+        <h5>Action</h5>
+    </div>
 </div>
 
-    <?php $i=1; while($row = mysqli_fetch_assoc($ldenied)) {
-      $name = ucfirst($row['FirstName']." ".$row['LastName']);
-      ?>
-<div class="row" style="margin-right: 0; margin-left: 0;">
-  <div class="col-md-1">
-    <h5><?php $i=$i; echo $i; $i++;?></h5>
-  </div>
-  <div class="col-md-4">
-    <h5><?php echo(isset($name))?$name:"";?></h5>
-  </div>
-  <div class="col-md-3">
-    <h5><?php echo(isset($row['Type_of_Name']))?$row['Type_of_Name']:"";?></h5>
-  </div>
-  <div class="col-md-2">
-    <h5><?php echo(isset($row['StateDate']))?$row['StateDate']:"";?></h5>
-  </div>
-  <div class="col-md-2">
-    <h5><?php echo(isset($row['EndDate']))?$row['EndDate']:"";?></h5>
-  </div>
-</div><hr style="margin-bottom: 0px;margin-top: 0px;border-top: 1px solid #eee;">
+<?php $i=1; while($row = mysqli_fetch_assoc($ldenied)) { 
+    $name = ucfirst($row['FirstName']." ".$row['LastName']);
+?>
+<div class="row" style="margin-right: 0; margin-top: 10px; margin-left: 0;">
+    <div class="col-md-1"><h5><?php echo $i++; ?></h5></div>
+    <div class="col-md-2"><h5><?php echo htmlspecialchars($name); ?></h5></div>
+    <div class="col-md-1" style="text-align: center;">
+        <h5><?php echo htmlspecialchars($row['EmpId']); ?></h5>
+    </div>
+    <div class="col-md-2">
+        <h5><?php echo htmlspecialchars($row['Type_of_Name']); ?></h5>
+    </div>
+    <div class="col-md-1">
+        <h5><?php echo htmlspecialchars($row['Reason']); ?></h5>
+    </div>
+    <div class="col-md-2" style="text-align: center;">
+        <h5><?php echo htmlspecialchars($row['StateDate']); ?></h5>
+    </div>
+    <div class="col-md-2" style="text-align: center;">
+        <h5><?php echo htmlspecialchars($row['EndDate']); ?></h5>
+    </div>
+    <div class="col-md-1" style="text-align: center;">
+        <a href="#" onclick="return confirmDeleteDenied('<?php echo $row['Detail_Id'];?>')" title="Delete">
+            <i class="fa fa-times" style="color: #202a29;" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
+<hr style="margin-bottom: 0px;margin-top: 0px;border-top: 1px solid #eee;">
 <?php } ?>
 </div>
 <div class="clearfix"></div>
@@ -216,6 +255,20 @@ function confirmAccept(id) {
 function confirmDeny(id) {
     if(confirm("Are you sure you want to deny this leave request?")) {
         window.location.href = "?msg=" + id;
+    }
+    return false;
+}
+
+function confirmDelete(id) {
+    if(confirm("Are you sure you want to delete this accepted leave?")) {
+        window.location.href = "?delete=" + id;
+    }
+    return false;
+}
+
+function confirmDeleteDenied(id) {
+    if(confirm("Are you sure you want to delete this denied leave?")) {
+        window.location.href = "?delete=" + id;
     }
     return false;
 }

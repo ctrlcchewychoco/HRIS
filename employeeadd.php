@@ -69,7 +69,7 @@
                   <span class="input-group-addon">
               <i class="fa fa-user" aria-hidden="true"></i>
               </span>
-              <input type="number" name="empid" title="Employee ID" value="<?php echo(isset($editemp["EmployeeId"]))?$editemp["EmployeeId"]:""; ?>" class="form-control" placeholder="Employee ID" required="" <?php echo isset($_GET['empedit']) ? 'readonly' : ''; ?> >
+              <input type="text" name="empid" title="Employee ID" value="<?php echo(isset($editemp["EmployeeId"]))?$editemp["EmployeeId"]:""; ?>" class="form-control" placeholder="Employee ID" required="" <?php echo isset($_GET['empedit']) ? 'readonly' : ''; ?> oninput="this.value = this.value.replace(/[^0-9]/g, '')">
               </div>
             </div>
             
@@ -157,7 +157,16 @@
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="text" name="mnumber" title="Mobile Number" value="<?php echo(isset($editemp["Mobile"]))?$editemp["Mobile"]:""; ?>" class="form-control" placeholder="Mobile Number" minlength="11" maxlength="11" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" pattern="09[0-9]{9}" required="">
+              <input type="text" 
+                     name="mnumber" 
+                     title="Mobile Number" 
+                     value="<?php echo(isset($editemp["Mobile"]))? sprintf('%011d', $editemp["Mobile"]) : ''; ?>"
+                     class="form-control" 
+                     placeholder="Mobile Number" 
+                     pattern="^(09)\d{9}$"
+                     maxlength="11" 
+                     oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^(?!09)/, '09')"
+                     required="">
               </div>
             </div>
 
@@ -303,82 +312,105 @@
             <span class="input-group-addon">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
             </span>
-            <input type="text" name="email" title="Email" value="<?php echo(isset($editemp["Email"]))?$editemp["Email"]:""; ?>" class="form-control" placeholder="Email Address" required="">
+            <input type="text" name="email" title="Email" value="<?php echo(isset($editemp["Email"]))?$editemp["Email"]:""; ?>" class="form-control" placeholder="Username" required="">
         </div>
     </div>
             
     <div class="col-md-3 control-label">
         <label class="control-label">Password*</label>
         <div class="input-group">             
-            <span class="input-group-addon">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </span>
-            <input type="password" id="Psw" title="Password" value="<?php echo(isset($editemp["Password"]))?$editemp["Password"]:""; ?>" name="password" placeholder="Password" class="form-control" required minlength="8" maxlength="12">
-            <span class="input-group-addon">
-                <a><i class='fa fa-eye' aria-hidden='false' onclick="passwordeyes()"></i></a>
-            </span>
-        </div>              
+        <span class="input-group-addon">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+        </span>
+        <input type="password" 
+               id="Psw" 
+               title="Password" 
+               value="<?php echo(isset($editemp["Password"]))?$editemp["Password"]:""; ?>" 
+               name="password" 
+               placeholder="Password" 
+               class="form-control" 
+               required 
+               minlength="8" 
+               maxlength="12"
+               onkeyup="checkCapsLock(event)"
+               onkeypress="return preventCapsLock(event)">
+        <span class="input-group-addon">
+            <a><i class='fa fa-eye' aria-hidden='false' onclick="passwordeyes()"></i></a>
+        </span>
+    </div>
+    <div id="capsLockWarning" style="color: red; display: none;">
+        Caps Lock is ON - Press Caps Lock to turn off
+    </div>              
     </div>
     <div class="clearfix"> </div>
 </div>
 
             <!-- sss -->
             <div class="col-md-4 control-label">
-              <label class="control-label">SSS Number*</label>
+              <label class="control-label">SSS Number (Optional)</label>
               <div class="input-group">             
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="number" name="sss" title="SSS Number" value="<?php echo(isset($editemp["sss"]))?$editemp["sss"]:""; ?>" class="form-control" placeholder="SSS Number" min="10" maxlength="10" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" >
-              </div>
-            </div>
-
-<!-- <script>
-function formatSSS(input) {
-  let numbers = input.value.replace(/\D/g, '');
-
-  if (numbers.length > 2) {
-    numbers = numbers.slice(0, 2) + '-' + numbers.slice(2);
-  }
-  if (numbers.length > 9) {
-    numbers = numbers.slice(0, 10) + '-' + numbers.slice(10, 11);
-  }
-  if (numbers.length > 12) {
-    numbers = numbers.slice(0, 12);
-  }
-
-  input.value = numbers;
-}
-</script> -->
-
-
-            <div class="col-md-4 control-label">
-              <label class="control-label">Philhealth Number*</label>
-              <div class="input-group">             
-                  <span class="input-group-addon">
-              <i class="fa fa-mobile" aria-hidden="true"></i>
-              </span>
-              <input type="number" name="philhealth" title="Philhealth Number" value="<?php echo(isset($editemp["philhealth"]))?$editemp["philhealth"]:""; ?>" class="form-control" placeholder="Philhealth Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+              <input type="text" 
+                     name="sss" 
+                     title="SSS Number" 
+                     value="<?php echo(isset($editemp["sss"]))?$editemp["sss"]:""; ?>" 
+                     class="form-control" 
+                     placeholder="SSS Number" 
+                     maxlength="10" 
+                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
               </div>
             </div>
 
             <div class="col-md-4 control-label">
-              <label class="control-label">Pag-Ibig Number*</label>
+              <label class="control-label">Philhealth Number (Optional)</label>
               <div class="input-group">             
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="number" name="pagibig" title="Pag-Ibig Number" value="<?php echo(isset($editemp["pagibig"]))?$editemp["pagibig"]:""; ?>" class="form-control" placeholder="Pag-ibig Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+              <input type="text" 
+                     name="philhealth" 
+                     title="Philhealth Number" 
+                     value="<?php echo(isset($editemp["philhealth"]))?$editemp["philhealth"]:""; ?>" 
+                     class="form-control" 
+                     placeholder="Philhealth Number" 
+                     maxlength="12" 
+                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)">
               </div>
             </div>
 
             <div class="col-md-4 control-label">
-              <label class="control-label">Tax Identification Number*</label>
+              <label class="control-label">Pag-Ibig Number (Optional)</label>
               <div class="input-group">             
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="number" name="taxidentification" title="Pag-Ibig Number" value="<?php echo(isset($editemp["taxidentification"]))?$editemp["taxidentification"]:""; ?>" class="form-control" placeholder="Tax Identification Number" min="12" maxlength="12" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+              <input type="text" 
+                     name="pagibig" 
+                     title="Pag-Ibig Number" 
+                     value="<?php echo(isset($editemp["pagibig"]))?$editemp["pagibig"]:""; ?>" 
+                     class="form-control" 
+                     placeholder="Pag-ibig Number" 
+                     maxlength="12" 
+                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)">
+              </div>
+            </div>
+
+            <div class="col-md-4 control-label">
+              <label class="control-label">Tax Identification Number (Optional)</label>
+              <div class="input-group">             
+                  <span class="input-group-addon">
+              <i class="fa fa-mobile" aria-hidden="true"></i>
+              </span>
+              <input type="text" 
+                     name="taxidentification" 
+                     title="TIN Number" 
+                     value="<?php echo(isset($editemp["taxidentification"]))?$editemp["taxidentification"]:""; ?>" 
+                     class="form-control" 
+                     placeholder="Tax Identification Number" 
+                     maxlength="12" 
+                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12)">
               </div>
             </div>
 
@@ -714,12 +746,19 @@ function formatSSS(input) {
 </div>
 
             <div class="col-md-4 control-label">
-              <label class="control-label">Contact Person Name</label>
+              <label class="control-label">Contact Person Name*</label>
               <div class="input-group"> 
-              <span class="input-group-addon">
-              <i class="fa fa-pencil " aria-hidden="true"></i>
-              </span>            
-              <input type="text" name="contactpersonname" title="contactpersonname" value="<?php echo(isset($editemp["contactpersonname"]))?$editemp["contactpersonname"]:""; ?>" class="form-control" placeholder="Contact Person Name">
+                  <span class="input-group-addon">
+              <i class="fa fa-user" aria-hidden="true"></i>
+              </span>
+              <input type="text" 
+                     name="contactpersonname" 
+                     title="Contact Person Name" 
+                     value="<?php echo(isset($editemp["contactpersonname"]))? htmlspecialchars($editemp["contactpersonname"]) : ''; ?>" 
+                     class="form-control" 
+                     placeholder="Contact Person Name"
+                     pattern="[A-Za-z\s]+"
+                     required="">
               </div>
             
             </div>
@@ -730,7 +769,16 @@ function formatSSS(input) {
                   <span class="input-group-addon">
               <i class="fa fa-mobile" aria-hidden="true"></i>
               </span>
-              <input type="text" name="contactpersonnumber" title="contactpersonnumber" value="<?php echo(isset($editemp["contactpersonnumber"]))?$editemp["contactpersonnumber"]:""; ?>" class="form-control" placeholder="Mobile Number" min="10" maxlength="10" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" required="">
+              <input type="text" 
+                     name="contactpersonnumber" 
+                     title="Contact Person Number" 
+                     value="<?php echo(isset($editemp["contactpersonnumber"]))? sprintf('%011d', $editemp["contactpersonnumber"]) : ''; ?>"
+                     class="form-control" 
+                     placeholder="Contact Person Number" 
+                     pattern="^(09)\d{9}$"
+                     maxlength="11" 
+                     oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^(?!09)/, '09')"
+                     required="">
               </div>
             </div>
 
@@ -773,6 +821,31 @@ document.addEventListener("DOMContentLoaded", function(e) {
   });
 });
 
+function preventCapsLock(e) {
+    if (e.getModifierState('CapsLock')) {
+        e.preventDefault();
+        document.getElementById('capsLockWarning').style.display = 'block';
+        return false;
+    }
+    document.getElementById('capsLockWarning').style.display = 'none';
+    return true;
+}
+
+function checkCapsLock(event) {
+    const capsLockWarning = document.getElementById('capsLockWarning');
+    if (event.getModifierState('CapsLock')) {
+        capsLockWarning.style.display = 'block';
+    } else {
+        capsLockWarning.style.display = 'none';
+    }
+}
+
+// Also check when input gets focus
+document.getElementById('Psw').addEventListener('focus', function(e) {
+    if (e.getModifierState('CapsLock')) {
+        document.getElementById('capsLockWarning').style.display = 'block';
+    }
+});
 </script>
 <script>
 var OneStepBack;

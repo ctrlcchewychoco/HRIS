@@ -199,7 +199,7 @@
 		}
 		else
 		{
-			header("location:../user/index.php?msg=haha and Password is Wrong!");exit;
+			header("location:../user/index.php?msg=Please Check your Username and Password");exit;
 		}
 	}
 ?>

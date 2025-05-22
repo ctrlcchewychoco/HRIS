@@ -10,7 +10,7 @@
    <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>HRM</title>
+      <title>EAGLE FLY BUILDERS INC. EMPLOYEE </title>
       <link rel="stylesheet" href="css/components.css">
       <link rel="stylesheet" href="css/icons.css">
       <link rel="stylesheet" href="css/responsee.css">
@@ -129,7 +129,7 @@ nav{
          <nav>
             <div class="line">
                <div class="s-12 l-5">
-                  <h3 style="color: white;">HRM</h3>
+                  <h3 style="color: white;">EAGLE FLY BUILDERS INC. EMPLOYEE</h3>
                </div>
                <div class="top-nav s-12 l-3 right">
                   <div class="employee-name" style="margin-top: 13%;">
